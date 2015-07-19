@@ -44,7 +44,10 @@ while my_cmd != 'exit':
 			lcd.write_string(my_char)
 	lcd.clear()
 	if my_cmd !='exit':
-		my_output = subprocess.check_output(my_cmd,shell=True)
+		try:
+			my_output = subprocess.check_output(my_cmd,shell=True,stderr=subprocess.STDOUT)
+		except Exception, e:
+			my_output = str(e.output)
 		#cut tabs down to spaces or new lines
 		#re.sub("\s+","\n",my_output)
 		lines =	my_output.split()
@@ -92,5 +95,7 @@ while my_cmd != 'exit':
 				b = 1;
 				c = 2;
 				d = 3;
+			#search through the output and use 'n' and 'N' to jump to those lines
+			#elif my_char == '/':
 	else:
 		lcd.write_string("Goodbye")
