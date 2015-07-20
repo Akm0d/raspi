@@ -19,6 +19,21 @@ lcd = CharLCD(cols=20, rows=4,
                 numbering_mode=GPIO.BCM)
 lcd.cursor_mode = CursorMode.blink
 my_cmd = ""
+#ASK FOR ROOT LOGIN BEFORE EXECUTING ANY COMMANDS
+#VERIFY ROOT PASSWORD
+my_username = getpass.getuser()
+my_perl = ""
+while my_perl != "Success!":
+	lcd.clear()
+	lcd.write_string(my_username)
+	lcd.write_string("\'s password:")
+	my_perl = subprocess.check_output("./pass.pl ",shell=True)
+	lcd.clear()
+	lcd.write_string(my_perl)
+	my_char = getch()
+#create a bashrc alias to run this script
+#have it detect a device on the GPIO pins and boot with the 
+#LCD terminal only if a device is detected
 while my_cmd != 'exit':
 	my_cmd = ""
 	lcd.clear();
@@ -51,6 +66,7 @@ while my_cmd != 'exit':
 		#cut tabs down to spaces or new lines
 		#re.sub("\s+","\n",my_output)
 		lines =	my_output.split()
+		##also split strings longer than 20 characters into two strings
 		my_length = len(lines)
 		if my_length <= 4:
 			# cover cases with short list
