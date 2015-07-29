@@ -25,9 +25,15 @@ my_username = getpass.getuser()
 my_perl = ""
 while my_perl != "Success!":
 	lcd.clear()
+	my_name = subprocess.check_output("hostname",shell=True)
+	lcd.write_string(my_name)
+	lcd.cursor_pos = (1,0)
+	my_ip = subprocess.check_output("hostname -I",shell=True)
+	lcd.write_string(my_ip)
+	lcd.cursor_pos = (3,0)
 	lcd.write_string(my_username)
 	lcd.write_string("\'s password:")
-	my_perl = subprocess.check_output("./pass.pl ",shell=True)
+	my_perl = subprocess.check_output("/root/developement/pi_scripts/pass.pl ",shell=True)
 	lcd.clear()
 	lcd.write_string(my_perl)
 	my_char = getch()
@@ -37,28 +43,61 @@ while my_perl != "Success!":
 while my_cmd != 'exit':
 	my_cmd = ""
 	lcd.clear();
-	my_pwd = os.getcwd();
+	my_pwd = os.getcwd()
 	lcd.cursor_pos = (0,0)
 	lcd.write_string(getpass.getuser())
 	lcd.write_string('@')
 	my_hostname = subprocess.check_output("hostname",shell=True)
-	hostname = my_hostname.split()
+	hostname = my_hostname.split() 
 	lcd.write_string(hostname[0])
 	lcd.write_string(':')
 	lcd.write_string(os.getcwd())
-	lcd.write_string('$');
+	lcd.write_string('$')
 	my_char = 'c'
 	while my_char != '\r' and my_char != '\n':
 		my_char = getch()
 	#handle Backspace
-	#	if my_char == '\b' or my_char == '\x08' or my_char == '\x7f':
-	#		my_cmd[:-1]
-	#	else:
-		if my_char != '\r' and my_char != '\n':
+	 	if my_char == '\x7f':
+	 		my_cmd = my_cmd[:-1]
+			lcd.clear()
+			my_pwd = os.getcwd()
+			lcd.cursor_pos = (0,0)
+			lcd.write_string(getpass.getuser())
+			lcd.write_string('@')
+			my_hostname = subprocess.check_output("hostname",shell=True)
+			hostname = my_hostname.split() 
+			lcd.write_string(hostname[0])
+			lcd.write_string(':')
+			lcd.write_string(os.getcwd())
+			lcd.write_string('$')
+			lcd.write_string(my_cmd)
+		if my_char != '\r' and my_char != '\n' and my_char != '\x7f':
 			my_cmd += my_char
 			lcd.write_string(my_char)
 	lcd.clear()
-	if my_cmd !='exit':
+	if re.compile("^\s*cd .+").match(my_cmd):
+		my_dir = re.sub("^\s*cd\s*","",my_cmd)
+		try:
+			os.chdir(my_dir)
+		except:
+			lcd.clear()
+			lcd.write_string("\"")
+			lcd.write_string(my_dir)
+			lcd.write_string("\" does not exist in this path")
+			getch()
+	elif re.compile("^\s*cd").match(my_cmd):
+		lcd.clear()
+		my_dir = "/"
+		my_dir += getpass.getuser()
+		try:
+			os.chdir(my_dir)
+		except:
+			lcd.clear()
+			lcd.write_string("\"")
+			lcd.write_string(my_dir)
+			lcd.write_string("\" does not exist in this path")
+			getch()
+	elif my_cmd !='exit':
 		try:
 			my_output = subprocess.check_output(my_cmd,shell=True,stderr=subprocess.STDOUT)
 		except Exception, e:
@@ -114,4 +153,10 @@ while my_cmd != 'exit':
 			#search through the output and use 'n' and 'N' to jump to those lines
 			#elif my_char == '/':
 	else:
-		lcd.write_string("Goodbye")
+		lcd.clear()
+		my_name = subprocess.check_output("hostname",shell=True)
+		lcd.cursor_pos = (0,0)
+		lcd.write_string(my_name)
+		my_ip = subprocess.check_output("hostname -I",shell=True)
+		lcd.cursor_pos = (1,0)
+		lcd.write_string(my_ip)
