@@ -75,7 +75,9 @@ while my_cmd != 'exit':
 			my_cmd += my_char
 			lcd.write_string(my_char)
 	lcd.clear()
-	if re.compile("^\s*cd .+").match(my_cmd):
+	if not my_cmd:
+		lcd.write_string("no command entered")
+	elif re.compile("^\s*cd .+").match(my_cmd):
 		my_dir = re.sub("^\s*cd\s*","",my_cmd)
 		try:
 			os.chdir(my_dir)
@@ -101,23 +103,29 @@ while my_cmd != 'exit':
 		try:
 			my_output = subprocess.check_output(my_cmd,shell=True,stderr=subprocess.STDOUT)
 		except Exception, e:
+		#cut tabs and spaces down new lines
 			my_output = str(e.output)
-		#cut tabs down to spaces or new lines
 		#re.sub("\s+","\n",my_output)
-		lines =	my_output.split()
+		my_words =	my_output.split()
+		lines = list()
+		def chunkstring(string, length):
+		    return (string[0+i:length+i] for i in range(0, len(string), length))
 		##also split strings longer than 20 characters into two strings
+		for item in my_words:
+			for chunk in chunkstring(item,20):
+				lines.append(chunk)
 		my_length = len(lines)
 		if my_length <= 4:
 			# cover cases with short list
-			lines.append("\n");
-			lines.append("\n");
-			lines.append("\n");
-			lines.append("\n");
+			lines.append("\n")
+			lines.append("\n")
+			lines.append("\n")
+			lines.append("\n")
 		my_char = 'c' 
-		a = 0;
-		b = 1;
-		c = 2; 
-		d = 3;
+		a = 0
+		b = 1
+		c = 2
+		d = 3
 		#Scroll through text using letters 'j' and 'k'
 		while my_char != '\r' and my_char != '\n' and my_char != 'q':
 			lcd.clear()
