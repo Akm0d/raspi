@@ -21,7 +21,6 @@ password.  Typing won't display output, but If you type the correct password the
 "SUCCESS!" will appear and pressing "Enter" will take you to command mode.  Otherwise the 
 word "Incorrect." will appear and pressing "Enter" will repeat the previous sequence.
 
-It will ask for the password of the current user
 NOTE: I have root user enabled on my raspberry pi.  This script has not been tested for pi's that 
 don't have a root user.
 
