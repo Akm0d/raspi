@@ -5,7 +5,7 @@ an lcd terminal for basic bash commands.  It is assumed that files associated wi
 terminal wil be located in the "/etc" folder.  Make sure that "command.py" and "pass.pl" 
 are excecutable by typing the following command in the terminal:
 </pre>
-<code>chmod +x command.py; chmod +x pass.pl</code>
+<code>chmod +x /etc/command.py; chmod +x /etc/pass.pl</code>
 <pre>
 In order to get terminal access on boot, In the "/etc/init.d" folder create an excecutable script 
 with these contents:
