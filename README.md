@@ -1,8 +1,9 @@
 # 20x4 LCD Terminal
 <pre>
-For those who have no monitor to connect to their raspberry pi, this code gives access to a terminal. 
-It is assumed that files associated with the terminal wil be located in the "/etc" folder.  Make sure
-that "command.py" and "pass.py" are excecutable by typing the following command in the terminal:
+For those who have no monitor to connect to their raspberry pi, this code creates
+an lcd terminal for basic bash commands.  It is assumed that files associated with the 
+terminal wil be located in the "/etc" folder.  Make sure that "command.py" and "pass.pl" 
+are excecutable by typing the following command in the terminal:
 </pre>
 <code>chmod +x command.py; chmod +x pass.pl</code>
 <pre>
@@ -12,7 +13,13 @@ with these contents:
 #!/bin/sh
 python /etc/command.py
 
-On boot, or when this script is run with "python /etc/command.py"
+On boot, or when this script is run with "python /etc/command.py" It will print the output of
+the "hostname" to the first line of the lcd. the output of "hostname -I" will be printed to
+the 2nd and 3rd lines. If these are empty it's because the pi hasn't finished it's boot
+sequence and obtained an ip address.  The 4th line will ask for the current user's
+password.  Typing won't display output, but If you type the correct password the word
+"SUCCESS!" will appear and pressing "Enter" will take you to the terminal.  Otherwise the 
+word "Incorrect." will appear and pressing "Enter" will repeat the previous sequence.
 
 It will ask for the password of the current user
 NOTE: I have root user enabled on my raspberry pi.  This script has not been tested for pi's that 
@@ -56,5 +63,7 @@ WARNING:  If you don't have an LCD screen, and this script is run on boot, then 
 still expect you to type a password and "exit" before finishing the boot sequence and 
 continuing to the desktop.
 
+After exiting, the raspberry pi will print the output of the "hostname" command to the first line
+of the lcd and the output of "hostname -I" to the remaining lines
 </pre>
 
