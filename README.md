@@ -14,11 +14,11 @@ with these contents:
 python /etc/command.py
 
 On boot, or when this script is run with "python /etc/command.py" It will print the output of
-the "hostname" to the first line of the lcd. the output of "hostname -I" will be printed to
-the 2nd and 3rd lines. If these are empty it's because the pi hasn't finished it's boot
+the "hostname" command to the first line of the lcd. the output of "hostname -I" will be printed 
+to the 2nd and 3rd lines. If these are empty it's because the pi hasn't finished it's boot
 sequence and obtained an ip address.  The 4th line will ask for the current user's
 password.  Typing won't display output, but If you type the correct password the word
-"SUCCESS!" will appear and pressing "Enter" will take you to the terminal.  Otherwise the 
+"SUCCESS!" will appear and pressing "Enter" will take you to command mode.  Otherwise the 
 word "Incorrect." will appear and pressing "Enter" will repeat the previous sequence.
 
 It will ask for the password of the current user
