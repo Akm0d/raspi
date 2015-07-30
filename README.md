@@ -49,9 +49,12 @@ return you to the beginning of input.
 
 Press "Enter" or "q" to exit the output viewing mode and go back into command mode.
 
-If this script is run on boot, you will also need to type "exit" and press "Enter" from command mode to resume the normal boot sequence of the raspberry pi.
+If this script is run on boot, you will also need to type "exit" and press "Enter" from 
+command mode to resume the normal boot sequence of the raspberry pi.
 
-WARNING:  If you don't have an LCD screen, and this script is run on boot, then it will still expect you to type a password and "exit" before finishing the boot sequence and continuing to the desktop.
+WARNING:  If you don't have an LCD screen, and this script is run on boot, then it will 
+still expect you to type a password and "exit" before finishing the boot sequence and 
+continuing to the desktop.
 
 </pre>
 
