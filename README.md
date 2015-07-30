@@ -22,7 +22,14 @@ After a successful password submission,the present working directory will be sho
 cursor. You can now type commands.  After pressing "Enter" the command will be excecuted.  This 
 script strictly supports commands that simply print information. Commands that open a prompt, 
 require extra input, or open a program should be avoided.  They will crash the terminal.  
-Some examples include: bash,vim,nano,firefox,lynx...etc.  
+Some examples include: bash,less,more,top,perl,python,vim,nano,ssh,lynx...etc.  Most commands 
+have the ability to strictly print output if you pass in the correct arguments. Clever usage of 
+commands such as "yes","echo","cat","sed", and "awk" can replace the need for certain comands.
+
+For example, instead of using "less" or "more" I could simply "cat" a file and get the same 
+result.  If I need to add something to a file I can use "echo 'content to be added' >> file.name"
+To see the result of "top" i could use "top -n 1" for a static output. "sed" and "awk" can be
+used instead of "vim" and "nano" to make edits to a file.
 
 Note that the script will execute a command, and then present the output. If a command has a large 
 output, such as "apt-get update" or "apt-get upgrade", then nothing will be shown on the display 
