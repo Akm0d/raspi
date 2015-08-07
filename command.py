@@ -40,8 +40,9 @@ while my_perl != "Success!":
 	my_char = getch()
 my_history = list()
 my_hist_file = expanduser("~") + "/.pi_history"
-with open(my_hist_file, 'w+') as f:
+with open(my_hist_file, 'r+') as f:
 	my_history = [x.strip('\n') for x in f.readlines()]
+
 my_history.append("")
 #create a bashrc alias to run this script
 #have it detect a device on the GPIO pins and boot with the 
@@ -137,7 +138,7 @@ while my_cmd != 'exit':
 			getch()
 	elif my_cmd !='exit':
 		if re.compile("\s*history\s*").match(my_cmd):
-			my_cmd ="cat ~/.pi_history"
+			my_cmd ="cat " + my_hist_file
 		try:
 			my_output = subprocess.check_output(my_cmd,shell=True,stderr=subprocess.STDOUT)
 		except Exception as e:
