@@ -135,12 +135,9 @@ while my_cmd != 'exit':
 			lcd.write_string(my_dir)
 			lcd.write_string("\" does not exist in this path")
 			getch()
-	elif re.compile("\s*history\s*").match(my_cmd):
-		try:
-			subprocess.check_output("cat ~/.pi_history",shell=True,stderr=subprocess.STDOUT)
-		except Exception as err:
-			print err.output
 	elif my_cmd !='exit':
+		if re.compile("\s*history\s*").match(my_cmd):
+			my_cmd ="cat ~/.pi_history"
 		try:
 			my_output = subprocess.check_output(my_cmd,shell=True,stderr=subprocess.STDOUT)
 		except Exception as e:
