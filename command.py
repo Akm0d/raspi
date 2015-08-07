@@ -3,6 +3,7 @@ import re
 import string
 import subprocess
 import os
+from os.path import expanduser
 from getch import getch
 import getpass
 import time
@@ -37,6 +38,11 @@ while my_perl != "Success!":
 	lcd.clear()
 	lcd.write_string(my_perl)
 	my_char = getch()
+my_history = list()
+my_hist_file = expanduser("~") + "/.pi_history"
+with open(my_hist_file, 'w+') as f:
+	my_history = [x.strip('\n') for x in f.readlines()]
+my_history.append("")
 #create a bashrc alias to run this script
 #have it detect a device on the GPIO pins and boot with the 
 #LCD terminal only if a device is detected
@@ -54,11 +60,14 @@ while my_cmd != 'exit':
 	lcd.write_string(os.getcwd())
 	lcd.write_string('$')
 	my_char = 'c'
+	#history variables
+	hist_length = len(my_history)
+	my_place = hist_length -1
 	while my_char != '\r' and my_char != '\n':
 		my_char = getch()
-	#handle Backspace
-	 	if my_char == '\x7f':
-	 		my_cmd = my_cmd[:-1]
+		#handle Backspace
+		if my_char == '\x7f':
+			my_cmd = my_cmd[:-1]
 			lcd.clear()
 			my_pwd = os.getcwd()
 			lcd.cursor_pos = (0,0)
@@ -71,9 +80,36 @@ while my_cmd != 'exit':
 			lcd.write_string(os.getcwd())
 			lcd.write_string('$')
 			lcd.write_string(my_cmd)
-		if my_char != '\r' and my_char != '\n' and my_char != '\x7f':
+		#Go up and down through history
+		elif my_char == '\033':#the escape sequence
+			getch()#skip a token
+			my_arrow = getch()#read arrow key value
+			if (my_arrow == 'A' or my_arrow == 'C') and my_place > 0:#up/right
+				my_place -= 1
+			elif (my_arrow == 'B' or my_arrow == 'D') and my_place < hist_length-1:#down/left
+				my_place += 1
+			my_cmd = my_history[my_place]
+			lcd.clear()
+			my_pwd = os.getcwd()
+			lcd.cursor_pos = (0,0)
+			lcd.write_string(getpass.getuser())
+			lcd.write_string('@')
+			my_hostname = subprocess.check_output("hostname",shell=True)
+			hostname = my_hostname.split() 
+			lcd.write_string(hostname[0])
+			lcd.write_string(':')
+			lcd.write_string(os.getcwd())
+			lcd.write_string('$')
+			lcd.write_string(my_cmd)
+		elif my_char != '\r' and my_char != '\n':
 			my_cmd += my_char
 			lcd.write_string(my_char)
+	my_history.insert(hist_length-2,my_cmd)#commands will be the second to last item
+	temp_cmd = "echo \"" + my_cmd + "\" >> ~/.pi_history"
+	try:
+		subprocess.check_output(temp_cmd, shell=True,stderr=subprocess.STDOUT)
+	except Exception as err:
+		print err.output
 	lcd.clear()
 	if not my_cmd:
 		lcd.write_string("no command entered")
@@ -99,10 +135,15 @@ while my_cmd != 'exit':
 			lcd.write_string(my_dir)
 			lcd.write_string("\" does not exist in this path")
 			getch()
+	elif re.compile("\s*history\s*").match(my_cmd):
+		try:
+			subprocess.check_output("cat ~/.pi_history",shell=True,stderr=subprocess.STDOUT)
+		except Exception as err:
+			print err.output
 	elif my_cmd !='exit':
 		try:
 			my_output = subprocess.check_output(my_cmd,shell=True,stderr=subprocess.STDOUT)
-		except Exception, e:
+		except Exception as e:
 		#cut tabs and spaces down new lines
 			my_output = str(e.output)
 		#re.sub("\s+","\n",my_output)
