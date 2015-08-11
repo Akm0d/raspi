@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 import re
 import string
 import subprocess
@@ -20,11 +20,21 @@ lcd = CharLCD(cols=20, rows=4,
                 numbering_mode=GPIO.BCM)
 lcd.cursor_mode = CursorMode.blink
 my_cmd = ""
-#ASK FOR ROOT LOGIN BEFORE EXECUTING ANY COMMANDS
-#VERIFY ROOT PASSWORD
 my_username = getpass.getuser()
 my_perl = ""
-print "\nWaiting for password\n";
+lcd.write_string("Press ENTER for LCD terminal")
+print "\nPress ENTER for LCD terminal\n";
+my_wait = subprocess.check_output("/root/developement/pi_scripts/wait.pl ",shell=True)
+if my_wait == "Timeout":
+	lcd.clear()
+	my_name = subprocess.check_output("hostname -A",shell=True)
+	lcd.cursor_pos = (0,0)
+	lcd.write_string(my_name)
+	my_ip = subprocess.check_output("hostname -I",shell=True)
+	lcd.cursor_pos = (2,0)
+	lcd.write_string(my_ip)
+	lcd.cursor_mode = CursorMode.hide
+	exit(0)
 while my_perl != "Success!":
 	lcd.clear()
 	my_name = subprocess.check_output("hostname -A",shell=True)
@@ -36,15 +46,6 @@ while my_perl != "Success!":
 	lcd.write_string(my_username)
 	lcd.write_string("\'s password:")
 	my_perl = subprocess.check_output("/root/developement/pi_scripts/pass.pl ",shell=True)
-	if my_perl == "Timeout":
-		lcd.clear()
-		my_name = subprocess.check_output("hostname -A",shell=True)
-		lcd.cursor_pos = (0,0)
-		lcd.write_string(my_name)
-		my_ip = subprocess.check_output("hostname -I",shell=True)
-		lcd.cursor_pos = (2,0)
-		lcd.write_string(my_ip)
-		exit(0)
 	lcd.clear()
 	lcd.write_string(my_perl)
 	my_char = getch()
@@ -262,3 +263,4 @@ while my_cmd != 'exit':
 		my_ip = subprocess.check_output("hostname -I",shell=True)
 		lcd.cursor_pos = (2,0)
 		lcd.write_string(my_ip)
+		lcd.cursor_mode = CursorMode.hide
