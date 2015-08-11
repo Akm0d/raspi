@@ -26,7 +26,7 @@ my_username = getpass.getuser()
 my_perl = ""
 while my_perl != "Success!":
 	lcd.clear()
-	my_name = subprocess.check_output("hostname",shell=True)
+	my_name = subprocess.check_output("hostname -A",shell=True)
 	lcd.write_string(my_name)
 	lcd.cursor_pos = (1,0)
 	my_ip = subprocess.check_output("hostname -I",shell=True)
@@ -246,9 +246,9 @@ while my_cmd != 'exit':
 				a = searched[search_pos]-3
 	else:
 		lcd.clear()
-		my_name = subprocess.check_output("hostname",shell=True)
+		my_name = subprocess.check_output("hostname -A",shell=True)
 		lcd.cursor_pos = (0,0)
 		lcd.write_string(my_name)
 		my_ip = subprocess.check_output("hostname -I",shell=True)
-		lcd.cursor_pos = (1,0)
+		lcd.cursor_pos = (2,0)
 		lcd.write_string(my_ip)
