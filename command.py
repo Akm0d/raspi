@@ -24,6 +24,7 @@ my_cmd = ""
 #VERIFY ROOT PASSWORD
 my_username = getpass.getuser()
 my_perl = ""
+print "\nWaiting for password\n";
 while my_perl != "Success!":
 	lcd.clear()
 	my_name = subprocess.check_output("hostname -A",shell=True)
@@ -35,6 +36,15 @@ while my_perl != "Success!":
 	lcd.write_string(my_username)
 	lcd.write_string("\'s password:")
 	my_perl = subprocess.check_output("/root/developement/pi_scripts/pass.pl ",shell=True)
+	if my_perl == "Timeout":
+		lcd.clear()
+		my_name = subprocess.check_output("hostname -A",shell=True)
+		lcd.cursor_pos = (0,0)
+		lcd.write_string(my_name)
+		my_ip = subprocess.check_output("hostname -I",shell=True)
+		lcd.cursor_pos = (2,0)
+		lcd.write_string(my_ip)
+		exit(0)
 	lcd.clear()
 	lcd.write_string(my_perl)
 	my_char = getch()

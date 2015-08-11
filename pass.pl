@@ -3,8 +3,19 @@ use strict;
 use warnings;
 
 my $pwd = (getpwuid($<))[1];
+my $word = "";
 system "stty -echo";
-chomp (my $word = <STDIN>);
+eval{
+	local $SIG{ALRM} = sub { 
+			system "stty echo";
+			print "Timeout";
+			exit(0);
+		};
+	alarm 10;
+	$word = <STDIN>;
+	alarm 0;
+	chomp $word;
+};
 system "stty echo";
 
 if(crypt($word, $pwd) ne $pwd) {
@@ -12,4 +23,5 @@ if(crypt($word, $pwd) ne $pwd) {
 } else {
 	print "Success!";
 }
+
 exit(0);
