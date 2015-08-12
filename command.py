@@ -24,7 +24,7 @@ my_username = getpass.getuser()
 my_perl = ""
 lcd.write_string("Press ENTER for LCD terminal")
 print "\nPress ENTER for LCD terminal\n";
-my_wait = subprocess.check_output("/root/developement/pi_scripts/wait.pl ",shell=True)
+my_wait = subprocess.check_output("/etc/wait.pl ",shell=True)
 if my_wait == "Timeout":
 	lcd.clear()
 	my_name = subprocess.check_output("hostname -A",shell=True)
@@ -45,7 +45,7 @@ while my_perl != "Success!":
 	lcd.cursor_pos = (3,0)
 	lcd.write_string(my_username)
 	lcd.write_string("\'s password:")
-	my_perl = subprocess.check_output("/root/developement/pi_scripts/pass.pl ",shell=True)
+	my_perl = subprocess.check_output("/etc/pass.pl ",shell=True)
 	lcd.clear()
 	lcd.write_string(my_perl)
 	my_char = getch()
