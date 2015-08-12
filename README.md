@@ -13,7 +13,10 @@ with these contents:
 #!/bin/sh
 python /etc/command.py
 
-On boot, or when this script is run with "python /etc/command.py" It will print the output of
+
+When this script is run, on boot or otherwise, It will ask you to press ENTER.  If ENTER is not 
+pressed then the script will continue to it's exit sequence. If ENTER is pressed then 
+the LCD will print the output of
 the "hostname" command to the first line of the lcd. the output of "hostname -I" will be printed 
 to the 2nd and 3rd lines. If these are empty it's because the pi hasn't finished it's boot
 sequence and obtained an ip address.  The 4th line will ask for the current user's
@@ -54,13 +57,6 @@ forwards and backwards for matches to that pattern.  If no matches were found th
 return you to the beginning of input.
 
 Press "Enter" or "q" to exit the output viewing mode and go back into command mode.
-
-If this script is run on boot, you will also need to type "exit" and press "Enter" from 
-command mode to resume the normal boot sequence of the raspberry pi.
-
-WARNING:  If you don't have an LCD screen, and this script is run on boot, then it will 
-still expect you to type a password and "exit" before finishing the boot sequence and 
-continuing to the desktop.
 
 After exiting, the raspberry pi will print the output of the "hostname" command to the first line
 of the lcd and the output of "hostname -I" to the remaining lines
