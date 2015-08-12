@@ -1,5 +1,12 @@
 # 20x4 LCD Terminal
 <pre>
+**IMPORTANT**
+Make sure that you download ALL of the following files to your /etc/ folder
+for this to work:
+command.py
+pass.pl
+wait.pl
+
 For those who have no monitor to connect to their raspberry pi, this code creates
 an lcd terminal for basic bash commands.  It is assumed that files associated with the 
 terminal wil be located in the "/etc" folder.  Make sure that "command.py" and "pass.pl" 
